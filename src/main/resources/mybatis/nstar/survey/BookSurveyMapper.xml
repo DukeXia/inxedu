@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="BookSurveyMapper" >
+  <resultMap id="BaseResultMap" type="com.inxedu.os.nstar.survey.entity.BookSurvey">
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="survey_title" property="surveyTitle" jdbcType="VARCHAR" />
+    <result column="survey_school" property="surveySchool" jdbcType="VARCHAR" />
+    <result column="begin_year" property="beginYear" jdbcType="VARCHAR" />
+    <result column="end_year" property="endYear" jdbcType="VARCHAR" />
+    <result column="term_number" property="termNumber" jdbcType="VARCHAR" />
+    <result column="term" property="term" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="author" property="author" jdbcType="VARCHAR" />
+    <result column="public_date" property="publicDate" jdbcType="TIMESTAMP" />
+    <result column="publishing_house" property="publishingHouse" jdbcType="VARCHAR" />
+    <result column="sum" property="sum" jdbcType="INTEGER" />
+    <result column="average" property="average" jdbcType="FLOAT" />
+    <result column="number" property="number" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="create_man" property="createMan" jdbcType="VARCHAR" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, survey_title, survey_school, begin_year, end_year, term_number, term, title,
+    author, public_date, publishing_house, sum, average, number, type, create_date, create_man,
+    memo
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from survey_book
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from survey_book
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.inxedu.os.nstar.survey.entity.BookSurvey" >
+    insert into survey_book (id, survey_title, survey_school, 
+      begin_year, end_year, term_number, 
+      term, title, author, 
+      public_date, publishing_house, sum, 
+      average, number, type, 
+      create_date, create_man, memo,term_id
+      )
+    values (#{id,jdbcType=BIGINT}, #{surveyTitle,jdbcType=VARCHAR}, #{surveySchool,jdbcType=VARCHAR}, 
+      #{beginYear,jdbcType=VARCHAR}, #{endYear,jdbcType=VARCHAR}, #{termNumber,jdbcType=VARCHAR}, 
+      #{term,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, 
+      #{publicDate,jdbcType=TIMESTAMP}, #{publishingHouse,jdbcType=VARCHAR}, #{sum,jdbcType=INTEGER}, 
+      #{average,jdbcType=INTEGER}, #{number,jdbcType=INTEGER}, #{type,jdbcType=INTEGER},
+      #{createDate,jdbcType=TIMESTAMP}, #{createMan,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR},#{bookSurveyTermId,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.inxedu.os.nstar.survey.entity.BookSurvey" >
+    insert into survey_book
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="surveyTitle != null" >
+        survey_title,
+      </if>
+      <if test="surveySchool != null" >
+        survey_school,
+      </if>
+      <if test="beginYear != null" >
+        begin_year,
+      </if>
+      <if test="endYear != null" >
+        end_year,
+      </if>
+      <if test="termNumber != null" >
+        term_number,
+      </if>
+      <if test="term != null" >
+        term,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="author != null" >
+        author,
+      </if>
+      <if test="publicDate != null" >
+        public_date,
+      </if>
+      <if test="publishingHouse != null" >
+        publishing_house,
+      </if>
+      <if test="sum != null" >
+        sum,
+      </if>
+      <if test="average != null" >
+        average,
+      </if>
+      <if test="number != null" >
+        number,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="createMan != null" >
+        create_man,
+      </if>
+      <if test="memo != null" >
+        memo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="surveyTitle != null" >
+        #{surveyTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="surveySchool != null" >
+        #{surveySchool,jdbcType=VARCHAR},
+      </if>
+      <if test="beginYear != null" >
+        #{beginYear,jdbcType=VARCHAR},
+      </if>
+      <if test="endYear != null" >
+        #{endYear,jdbcType=VARCHAR},
+      </if>
+      <if test="termNumber != null" >
+        #{termNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="term != null" >
+        #{term,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null" >
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="publicDate != null" >
+        #{publicDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="publishingHouse != null" >
+        #{publishingHouse,jdbcType=VARCHAR},
+      </if>
+      <if test="sum != null" >
+        #{sum,jdbcType=INTEGER},
+      </if>
+      <if test="average != null" >
+        #{average,jdbcType=INTEGER},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createMan != null" >
+        #{createMan,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.inxedu.os.nstar.survey.entity.BookSurvey" >
+    update survey_book
+    <set >
+      <if test="surveyTitle != null" >
+        survey_title = #{surveyTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="surveySchool != null" >
+        survey_school = #{surveySchool,jdbcType=VARCHAR},
+      </if>
+      <if test="beginYear != null" >
+        begin_year = #{beginYear,jdbcType=VARCHAR},
+      </if>
+      <if test="endYear != null" >
+        end_year = #{endYear,jdbcType=VARCHAR},
+      </if>
+      <if test="termNumber != null" >
+        term_number = #{termNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="term != null" >
+        term = #{term,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null" >
+        author = #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="publicDate != null" >
+        public_date = #{publicDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="publishingHouse != null" >
+        publishing_house = #{publishingHouse,jdbcType=VARCHAR},
+      </if>
+      <if test="sum != null" >
+        sum = #{sum,jdbcType=INTEGER},
+      </if>
+      <if test="average != null" >
+        average = #{average,jdbcType=INTEGER},
+      </if>
+      <if test="number != null" >
+        number = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createMan != null" >
+        create_man = #{createMan,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null" >
+        memo = #{memo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.inxedu.os.nstar.survey.entity.BookSurvey" >
+    update survey_book
+    set survey_title = #{surveyTitle,jdbcType=VARCHAR},
+      survey_school = #{surveySchool,jdbcType=VARCHAR},
+      begin_year = #{beginYear,jdbcType=VARCHAR},
+      end_year = #{endYear,jdbcType=VARCHAR},
+      term_number = #{termNumber,jdbcType=VARCHAR},
+      term = #{term,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      author = #{author,jdbcType=VARCHAR},
+      public_date = #{publicDate,jdbcType=TIMESTAMP},
+      publishing_house = #{publishingHouse,jdbcType=VARCHAR},
+      sum = #{sum,jdbcType=INTEGER},
+      average = #{average,jdbcType=INTEGER},
+      number = #{number,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      create_man = #{createMan,jdbcType=VARCHAR},
+      memo = #{memo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectBookSurvey" resultMap="BaseResultMap">
+    SELECT * FROM  survey_book ORDER By average DESC
+    <include refid="publicMapper.pageEnd"/>
+  </select>
+  <select id="selectBookSurveyCount" resultType="java.lang.Integer">
+    SELECT COUNT(*) FROM  survey_book average
+  </select>
+  <select id="findbookSurvey" parameterType="map" resultMap="BaseResultMap">
+    SELECT * from survey_book
+    <where>
+      <if test="e.surveySchool != null ">
+       survey_school LIKE  '%${e.surveySchool}%'
+      </if>
+      <if test="e.surveyTitle != null">
+        and survey_title LIKE '%${e.surveyTitle}%'
+      </if>
+    </where>
+    ORDER By average DESC
+    <include refid="publicMapper.pageEnd"/>
+  </select>
+  <select id="findbookSurveyCount" parameterType="map" resultType="java.lang.Integer">
+    SELECT count(*) from survey_book
+    <where>
+      <if test="e.surveySchool != null">
+        survey_school LIKE  '%${e.surveySchool}%'
+      </if>
+      <if test="e.surveyTitle != null">
+        and survey_title LIKE '%${e.surveyTitle}%'
+      </if>
+    </where>
+  </select>
+  <select id="findBookSurveyList"  resultMap="BaseResultMap">
+  SELECT * FROM survey_book
+  </select>
+  <select id="selectBookSurveyListByState" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM `survey_book` WHERE  TYPE =#{e.type} AND term_id IN (SELECT id FROM `survey_book_term` WHERE state =1)
+    <include refid="publicMapper.pageEnd"/>
+  </select>
+  <select id="selectBookSurveyListByStateCount" parameterType="map" resultType="int">
+ SELECT count(*) FROM `survey_book` WHERE  TYPE =#{e.type} AND term_id IN (SELECT id FROM `survey_book_term` WHERE state =1)
+  </select>
+  <select id="findbookSurveyByName" parameterType="map" resultMap="BaseResultMap">
+    select * from survey_book
+    <where>
+      <if test="e.surveyTitle != null">
+        and survey_title LIKE '%${e.surveyTitle}%'
+      </if>
+      AND type=#{e.type}
+    </where>
+    <include refid="publicMapper.pageEnd"/>
+  </select>
+  <select id="findbookSurveyByNameCount" parameterType="map" resultType="int">
+    select COUNT(*) from survey_book
+    <where>
+      <if test="e.surveyTitle != null">
+        and survey_title LIKE '%${e.surveyTitle}%'
+      </if>
+     AND type=#{e.type}
+    </where>
+  </select>
+  <select id="findBookSurveyByTermId" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM survey_book WHERE term_id=#{e}
+    <include refid="publicMapper.pageEnd"/>
+  </select>
+  <select id="findBookSurveyByTermIdCount" parameterType="map" resultType="int">
+    SELECT COUNT(*) FROM survey_book WHERE term_id=#{e}
+  </select>
+</mapper>

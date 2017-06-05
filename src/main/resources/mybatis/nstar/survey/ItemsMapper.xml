@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SurveyItemsMapper" >
+    <resultMap id="BaseResultMap" type="com.inxedu.os.nstar.survey.entity.Items" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="sort_num" property="sortNum" jdbcType="INTEGER" />
+        <result column="item" property="item" jdbcType="VARCHAR" />
+        <result column="statistics" property="statistics" jdbcType="INTEGER" />
+        <result column="state" property="state" jdbcType="BIT" />
+        <result column="question_id" property="questionId" jdbcType="BIGINT" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, sort_num, item, statistics, state, question_id
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select
+        <include refid="Base_Column_List" />
+        from survey_iterms
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from survey_iterms
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.inxedu.os.nstar.survey.entity.Items" >
+        insert into survey_iterms (id, sort_num, item,
+        statistics, state, question_id
+        )
+        values (#{id,jdbcType=BIGINT}, #{sortNum,jdbcType=INTEGER}, #{item,jdbcType=VARCHAR},
+        #{statistics,jdbcType=INTEGER}, #{state,jdbcType=BIT}, #{questionId,jdbcType=BIGINT}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.inxedu.os.nstar.survey.entity.Items" >
+        insert into survey_iterms
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="sortNum != null" >
+                sort_num,
+            </if>
+            <if test="item != null" >
+                item,
+            </if>
+            <if test="statistics != null" >
+                statistics,
+            </if>
+            <if test="state != null" >
+                state,
+            </if>
+            <if test="questionId != null" >
+                question_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="sortNum != null" >
+                #{sortNum,jdbcType=INTEGER},
+            </if>
+            <if test="item != null" >
+                #{item,jdbcType=VARCHAR},
+            </if>
+            <if test="statistics != null" >
+                #{statistics,jdbcType=INTEGER},
+            </if>
+            <if test="state != null" >
+                #{state,jdbcType=BIT},
+            </if>
+            <if test="questionId != null" >
+                #{questionId,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.inxedu.os.nstar.survey.entity.Items" >
+        update survey_iterms
+        <set >
+            <if test="sortNum != null" >
+                sort_num = #{sortNum,jdbcType=INTEGER},
+            </if>
+            <if test="item != null" >
+                item = #{item,jdbcType=VARCHAR},
+            </if>
+            <if test="statistics != null" >
+                statistics = #{statistics,jdbcType=INTEGER},
+            </if>
+            <if test="state != null" >
+                state = #{state,jdbcType=BIT},
+            </if>
+            <if test="questionId != null" >
+                question_id = #{questionId,jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.inxedu.os.nstar.survey.entity.Items" >
+        update survey_iterms
+        set sort_num = #{sortNum,jdbcType=INTEGER},
+        item = #{item,jdbcType=VARCHAR},
+        statistics = #{statistics,jdbcType=INTEGER},
+        state = #{state,jdbcType=BIT},
+        question_id = #{questionId,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateStatics" parameterType="long">
+        UPDATE survey_iterms set statistics = statistics+1 WHERE id =#{VALUE}
+    </update>
+    <select id="findItemsByquestionId" parameterType="long" resultMap="BaseResultMap">
+        SELECT *  FROM  survey_iterms WHERE question_id = #{VALUE}
+    </select>
+  <!--  <select id="findContentByQuestionId" parameterType="java.lang.Long" resultType="java.lang.String">
+        select item  from ;
+    </select>-->
+    <delete id="deleteItermsByQuestionId" parameterType="long">
+        DELETE FROM survey_iterms WHERE question_id=#{VALUE}
+    </delete>
+</mapper>

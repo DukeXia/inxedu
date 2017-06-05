@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ExperimentStudentMapper" >
+  <resultMap id="BaseResultMap" type="com.inxedu.os.nstar.experiment.entity.ExperimentStudent" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="experiment_id" property="experimentId" jdbcType="BIGINT"/>
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="school" property="school" jdbcType="VARCHAR" />
+    <result column="student_no" property="studentNo" jdbcType="VARCHAR"/>
+    <result column="lab_class_name" property="labClassName" jdbcType="VARCHAR" />
+    <result column="teacher" property="teacher" jdbcType="VARCHAR" />
+    <result column="lab_address" property="labAddress" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="score1" property="score1" jdbcType="INTEGER" />
+    <result column="score2" property="score2" jdbcType="INTEGER" />
+    <result column="score3" property="score3" jdbcType="INTEGER" />
+    <result column="score4" property="score4" jdbcType="INTEGER" />
+    <result column="score5" property="score5" jdbcType="INTEGER" />
+    <result column="score6" property="score6" jdbcType="INTEGER" />
+    <result column="score7" property="score7" jdbcType="INTEGER" />
+    <result column="score8" property="score8" jdbcType="INTEGER" />
+    <result column="score9" property="score9" jdbcType="INTEGER" />
+    <result column="score10" property="score10" jdbcType="INTEGER" />
+    <result column="sum" property="sum" jdbcType="INTEGER" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,experiment_id ,course_name, school, lab_class_name, teacher, lab_address, create_date, score1,
+    score2, score3, score4, score5, score6, score7, score8, score9, score10, sum, memo
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from experiment_student
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from experiment_student
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.inxedu.os.nstar.experiment.entity.ExperimentStudent" >
+    insert into experiment_student (id,experiment_id, course_name, school,student_no,
+      lab_class_name, teacher, lab_address, 
+      create_date, score1, score2, 
+      score3, score4, score5, 
+      score6, score7, score8, 
+      score9, score10, sum, 
+      memo)
+    values (#{id,jdbcType=BIGINT}, #{experimentId,jdbcType=BIGINT},#{courseName,jdbcType=VARCHAR}, #{school,jdbcType=VARCHAR},#{studentNo,jdbcType=VARCHAR},
+      #{labClassName,jdbcType=VARCHAR}, #{teacher,jdbcType=VARCHAR}, #{labAddress,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{score1,jdbcType=INTEGER}, #{score2,jdbcType=INTEGER}, 
+      #{score3,jdbcType=INTEGER}, #{score4,jdbcType=INTEGER}, #{score5,jdbcType=INTEGER}, 
+      #{score6,jdbcType=INTEGER}, #{score7,jdbcType=INTEGER}, #{score8,jdbcType=INTEGER}, 
+      #{score9,jdbcType=INTEGER}, #{score10,jdbcType=INTEGER}, #{sum,jdbcType=INTEGER}, 
+      #{memo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.inxedu.os.nstar.experiment.entity.ExperimentStudent" >
+    insert into experiment_student
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="experimentId!=null">
+        experiment_id,
+      </if>
+      <if test="courseName != null" >
+        course_name,
+      </if>
+      <if test="school != null" >
+        school,
+      </if>
+      <if test="labClassName != null" >
+        lab_class_name,
+      </if>
+      <if test="teacher != null" >
+        teacher,
+      </if>
+      <if test="labAddress != null" >
+        lab_address,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="score1 != null" >
+        score1,
+      </if>
+      <if test="score2 != null" >
+        score2,
+      </if>
+      <if test="score3 != null" >
+        score3,
+      </if>
+      <if test="score4 != null" >
+        score4,
+      </if>
+      <if test="score5 != null" >
+        score5,
+      </if>
+      <if test="score6 != null" >
+        score6,
+      </if>
+      <if test="score7 != null" >
+        score7,
+      </if>
+      <if test="score8 != null" >
+        score8,
+      </if>
+      <if test="score9 != null" >
+        score9,
+      </if>
+      <if test="score10 != null" >
+        score10,
+      </if>
+      <if test="sum != null" >
+        sum,
+      </if>
+      <if test="memo != null" >
+        memo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="experimentId">
+        #{experimentId,jdbcType=BIGINT},
+      </if>
+      <if test="courseName != null" >
+        #{courseName,jdbcType=VARCHAR},
+      </if>
+      <if test="school != null" >
+        #{school,jdbcType=VARCHAR},
+      </if>
+      <if test="labClassName != null" >
+        #{labClassName,jdbcType=VARCHAR},
+      </if>
+      <if test="teacher != null" >
+        #{teacher,jdbcType=VARCHAR},
+      </if>
+      <if test="labAddress != null" >
+        #{labAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="score1 != null" >
+        #{score1,jdbcType=INTEGER},
+      </if>
+      <if test="score2 != null" >
+        #{score2,jdbcType=INTEGER},
+      </if>
+      <if test="score3 != null" >
+        #{score3,jdbcType=INTEGER},
+      </if>
+      <if test="score4 != null" >
+        #{score4,jdbcType=INTEGER},
+      </if>
+      <if test="score5 != null" >
+        #{score5,jdbcType=INTEGER},
+      </if>
+      <if test="score6 != null" >
+        #{score6,jdbcType=INTEGER},
+      </if>
+      <if test="score7 != null" >
+        #{score7,jdbcType=INTEGER},
+      </if>
+      <if test="score8 != null" >
+        #{score8,jdbcType=INTEGER},
+      </if>
+      <if test="score9 != null" >
+        #{score9,jdbcType=INTEGER},
+      </if>
+      <if test="score10 != null" >
+        #{score10,jdbcType=INTEGER},
+      </if>
+      <if test="sum != null" >
+        #{sum,jdbcType=INTEGER},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.inxedu.os.nstar.experiment.entity.ExperimentStudent" >
+    update experiment_student
+    <set >
+
+      <if test="courseName != null" >
+        course_name = #{courseName,jdbcType=VARCHAR},
+      </if>
+      <if test="school != null" >
+        school = #{school,jdbcType=VARCHAR},
+      </if>
+      <if test="labClassName != null" >
+        lab_class_name = #{labClassName,jdbcType=VARCHAR},
+      </if>
+      <if test="teacher != null" >
+        teacher = #{teacher,jdbcType=VARCHAR},
+      </if>
+      <if test="labAddress != null" >
+        lab_address = #{labAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="score1 != null" >
+        score1 = #{score1,jdbcType=INTEGER},
+      </if>
+      <if test="score2 != null" >
+        score2 = #{score2,jdbcType=INTEGER},
+      </if>
+      <if test="score3 != null" >
+        score3 = #{score3,jdbcType=INTEGER},
+      </if>
+      <if test="score4 != null" >
+        score4 = #{score4,jdbcType=INTEGER},
+      </if>
+      <if test="score5 != null" >
+        score5 = #{score5,jdbcType=INTEGER},
+      </if>
+      <if test="score6 != null" >
+        score6 = #{score6,jdbcType=INTEGER},
+      </if>
+      <if test="score7 != null" >
+        score7 = #{score7,jdbcType=INTEGER},
+      </if>
+      <if test="score8 != null" >
+        score8 = #{score8,jdbcType=INTEGER},
+      </if>
+      <if test="score9 != null" >
+        score9 = #{score9,jdbcType=INTEGER},
+      </if>
+      <if test="score10 != null" >
+        score10 = #{score10,jdbcType=INTEGER},
+      </if>
+      <if test="sum != null" >
+        sum = #{sum,jdbcType=INTEGER},
+      </if>
+      <if test="memo != null" >
+        memo = #{memo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.inxedu.os.nstar.experiment.entity.ExperimentStudent" >
+    update experiment_student
+    set course_name = #{courseName,jdbcType=VARCHAR},
+      school = #{school,jdbcType=VARCHAR},
+      lab_class_name = #{labClassName,jdbcType=VARCHAR},
+      teacher = #{teacher,jdbcType=VARCHAR},
+      lab_address = #{labAddress,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      score1 = #{score1,jdbcType=INTEGER},
+      score2 = #{score2,jdbcType=INTEGER},
+      score3 = #{score3,jdbcType=INTEGER},
+      score4 = #{score4,jdbcType=INTEGER},
+      score5 = #{score5,jdbcType=INTEGER},
+      score6 = #{score6,jdbcType=INTEGER},
+      score7 = #{score7,jdbcType=INTEGER},
+      score8 = #{score8,jdbcType=INTEGER},
+      score9 = #{score9,jdbcType=INTEGER},
+      score10 = #{score10,jdbcType=INTEGER},
+      sum = #{sum,jdbcType=INTEGER},
+      memo = #{memo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="findResultBySutdentNo" parameterType="com.inxedu.os.nstar.experiment.entity.ExperimentStudent" resultMap="BaseResultMap">
+    SELECT * FROM experiment_student WHERE student_no=#{studentNo} and experiment_id=#{experimentId}
+  </select>
+  <select id="findExperimentByExperimentId" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM experiment_student WHERE experiment_id=#{e.experimentId} ORDER BY  sum DESC
+  </select>
+  <select id="findExperimentByExperimentIdCount" parameterType="map" resultType="int">
+    SELECT COUNT(*) FROM experiment_student WHERE experiment_id=#{e.experimentId}
+  </select>
+</mapper>

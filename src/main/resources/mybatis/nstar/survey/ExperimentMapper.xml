@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="ExperimentMapper" >
+  <resultMap id="BaseResultMap" type="com.inxedu.os.nstar.experiment.entity.Experiment" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="course_name" property="courseName" jdbcType="VARCHAR" />
+    <result column="school" property="school" jdbcType="VARCHAR" />
+    <result column="lab_class_name" property="labClassName" jdbcType="VARCHAR" />
+    <result column="teacher" property="teacher" jdbcType="VARCHAR" />
+    <result column="lab_address" property="labAddress" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="sum" property="sum" jdbcType="INTEGER" />
+    <result column="number" property="number" jdbcType="INTEGER" />
+    <result column="average" property="average" jdbcType="DOUBLE" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, course_name, school, lab_class_name, teacher, lab_address, create_date, sum, number,
+    average, memo
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from experiment
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from experiment
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.inxedu.os.nstar.experiment.entity.Experiment" >
+    insert into experiment (id, course_name, school,
+      lab_class_name, teacher, lab_address, 
+      create_date, sum, number,
+      average, memo)
+    values (#{id,jdbcType=BIGINT}, #{courseName,jdbcType=VARCHAR}, #{school,jdbcType=VARCHAR},
+      #{labClassName,jdbcType=VARCHAR}, #{teacher,jdbcType=VARCHAR}, #{labAddress,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{sum,jdbcType=INTEGER}, #{number,jdbcType=INTEGER},
+      #{average,jdbcType=DOUBLE}, #{memo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.inxedu.os.nstar.experiment.entity.Experiment" >
+    insert into experiment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="courseName != null" >
+        course_name,
+      </if>
+      <if test="shool != null" >
+        shool,
+      </if>
+      <if test="labClassName != null" >
+        lab_class_name,
+      </if>
+      <if test="teacher != null" >
+        teacher,
+      </if>
+      <if test="labAddress != null" >
+        lab_address,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="sum != null" >
+        sum,
+      </if>
+      <if test="number != null" >
+        number,
+      </if>
+      <if test="average != null" >
+        average,
+      </if>
+      <if test="memo != null" >
+        memo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="courseName != null" >
+        #{courseName,jdbcType=VARCHAR},
+      </if>
+      <if test="shool != null" >
+        #{shool,jdbcType=VARCHAR},
+      </if>
+      <if test="labClassName != null" >
+        #{labClassName,jdbcType=VARCHAR},
+      </if>
+      <if test="teacher != null" >
+        #{teacher,jdbcType=VARCHAR},
+      </if>
+      <if test="labAddress != null" >
+        #{labAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sum != null" >
+        #{sum,jdbcType=INTEGER},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=INTEGER},
+      </if>
+      <if test="average != null" >
+        #{average,jdbcType=DOUBLE},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.inxedu.os.nstar.experiment.entity.Experiment" >
+    update experiment
+    <set >
+      <if test="courseName != null" >
+        course_name = #{courseName,jdbcType=VARCHAR},
+      </if>
+      <if test="school != null" >
+        school = #{school,jdbcType=VARCHAR},
+      </if>
+      <if test="labClassName != null" >
+        lab_class_name = #{labClassName,jdbcType=VARCHAR},
+      </if>
+      <if test="teacher != null" >
+        teacher = #{teacher,jdbcType=VARCHAR},
+      </if>
+      <if test="labAddress != null" >
+        lab_address = #{labAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sum != null" >
+        sum = #{sum,jdbcType=INTEGER},
+      </if>
+      <if test="number != null" >
+        number = #{number,jdbcType=INTEGER},
+      </if>
+      <if test="average != null" >
+        average = #{average,jdbcType=DOUBLE},
+      </if>
+      <if test="memo != null" >
+        memo = #{memo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.inxedu.os.nstar.experiment.entity.Experiment" >
+    update experiment
+    set course_name = #{courseName,jdbcType=VARCHAR},
+      school = #{school,jdbcType=VARCHAR},
+      lab_class_name = #{labClassName,jdbcType=VARCHAR},
+      teacher = #{teacher,jdbcType=VARCHAR},
+      lab_address = #{labAddress,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      sum = #{sum,jdbcType=INTEGER},
+      number = #{number,jdbcType=INTEGER},
+      average = #{average,jdbcType=DOUBLE},
+      memo = #{memo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="findExperimentList" resultMap="BaseResultMap">
+    SELECT  *  FROM   experiment ORDER BY average DESC
+    <include refid="publicMapper.pageEnd"/>
+  </select>
+  <select id="findExperimentListCount" resultType="int">
+    SELECT COUNT(*)  FROM   experiment  ORDER BY average DESC
+  </select>
+  <select id="findByCourseName" parameterType="map" resultMap="BaseResultMap">
+    SELECT  *  FROM  experiment
+    <where>
+      <if test="e.courseName != null">
+         course_name LIKE '%${e.courseName}%'
+      </if>
+
+    </where>
+    ORDER BY average DESC
+    <include refid="publicMapper.pageEnd"/>
+  </select>
+  <select id="findByCourseNameCount" parameterType="map" resultType="int">
+    SELECT  COUNT(*)  FROM  experiment
+    <where>
+      <if test="e.courseName != null">
+        and course_name LIKE '%${e.courseName}%'
+      </if>
+    </where>
+  </select>
+  <update id="updateSumAnNumber" parameterType="com.inxedu.os.nstar.experiment.entity.Experiment">
+      UPDATE experiment SET sum=sum+#{sum} , number=number+1 ,average = #{average,jdbcType=DOUBLE}  WHERE id=#{id}
+  </update>
+  <select id="findAllExperiment" resultMap="BaseResultMap">
+    SELECT *  FROM  experiment
+  </select>
+ </mapper>

@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="BookSurveyTeacherMapper" >
+  <resultMap id="BaseResultMap" type="com.inxedu.os.nstar.survey.entity.BookSurveyTeacher" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="book_survey_id" property="bookSurveyId" jdbcType="BIGINT" />
+    <result column="job_title" property="jobTitle" jdbcType="VARCHAR" />
+    <result column="position" property="position" jdbcType="VARCHAR" />
+    <result column="teacher_no" property="teacherNo" jdbcType="VARCHAR" />
+    <result column="teacher_name" property="teacherName" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="score1_1" property="score1_1" jdbcType="INTEGER" />
+    <result column="score1_2" property="score1_2" jdbcType="INTEGER" />
+    <result column="score1_3" property="score1_3" jdbcType="INTEGER" />
+    <result column="score2_1" property="score2_1" jdbcType="INTEGER" />
+    <result column="score2_2" property="score2_2" jdbcType="INTEGER" />
+    <result column="score2_3" property="score2_3" jdbcType="INTEGER" />
+    <result column="score3_1" property="score3_1" jdbcType="INTEGER" />
+    <result column="score3_2" property="score3_2" jdbcType="INTEGER" />
+    <result column="score4_1" property="score4_1" jdbcType="INTEGER" />
+    <result column="score4_2" property="score4_2" jdbcType="INTEGER" />
+    <result column="score5" property="score5" jdbcType="INTEGER" />
+    <result column="score6" property="score6" jdbcType="INTEGER" />
+    <result column="score7" property="score7" jdbcType="INTEGER" />
+    <result column="score" property="score" jdbcType="INTEGER" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, book_survey_id, job_title, position, teacher_no, teacher_name, create_date, score1_1, 
+    score1_2, score1_3, score2_1, score2_2, score2_3, score3_1, score3_2, score4_1, score4_2, 
+    score5, score6, score7, score, memo
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from survey_book_teacher
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from survey_book_teacher
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.inxedu.os.nstar.survey.entity.BookSurveyTeacher" >
+    insert into survey_book_teacher (id, book_survey_id, job_title, 
+      position, teacher_no, teacher_name, 
+      create_date, score1_1, score1_2, 
+      score1_3, score2_1, score2_2, 
+      score2_3, score3_1, score3_2, 
+      score4_1, score4_2, score5, 
+      score6, score7, score, 
+      memo)
+    values (#{id,jdbcType=BIGINT}, #{bookSurveyId,jdbcType=BIGINT}, #{jobTitle,jdbcType=VARCHAR}, 
+      #{position,jdbcType=VARCHAR}, #{teacherNo,jdbcType=VARCHAR}, #{teacherName,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{score1_1,jdbcType=INTEGER}, #{score1_2,jdbcType=INTEGER},
+      #{score1_3,jdbcType=INTEGER}, #{score2_1,jdbcType=INTEGER}, #{score2_2,jdbcType=INTEGER},
+      #{score2_3,jdbcType=INTEGER}, #{score3_1,jdbcType=INTEGER}, #{score3_2,jdbcType=INTEGER},
+      #{score4_1,jdbcType=INTEGER}, #{score4_2,jdbcType=INTEGER}, #{score5,jdbcType=INTEGER},
+      #{score6,jdbcType=INTEGER}, #{score7,jdbcType=INTEGER}, #{score,jdbcType=INTEGER}, 
+      #{memo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.inxedu.os.nstar.survey.entity.BookSurveyTeacher" >
+    insert into survey_book_teacher
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="bookSurveyId != null" >
+        book_survey_id,
+      </if>
+      <if test="jobTitle != null" >
+        job_title,
+      </if>
+      <if test="position != null" >
+        position,
+      </if>
+      <if test="teacherNo != null" >
+        teacher_no,
+      </if>
+      <if test="teacherName != null" >
+        teacher_name,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="score1_1 != null" >
+        score1_1,
+      </if>
+      <if test="score1_2 != null" >
+        score1_2,
+      </if>
+      <if test="score1_3 != null" >
+        score1_3,
+      </if>
+      <if test="score2_1 != null" >
+        score2_1,
+      </if>
+      <if test="score2_2 != null" >
+        score2_2,
+      </if>
+      <if test="score2_3 != null" >
+        score2_3,
+      </if>
+      <if test="score3_1 != null" >
+        score3_1,
+      </if>
+      <if test="score3_2 != null" >
+        score3_2,
+      </if>
+      <if test="score4_1 != null" >
+        score4_1,
+      </if>
+      <if test="score42 != null" >
+        score4_2,
+      </if>
+      <if test="score5 != null" >
+        score5,
+      </if>
+      <if test="score6 != null" >
+        score6,
+      </if>
+      <if test="score7 != null" >
+        score7,
+      </if>
+      <if test="score != null" >
+        score,
+      </if>
+      <if test="memo != null" >
+        memo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="bookSurveyId != null" >
+        #{bookSurveyId,jdbcType=BIGINT},
+      </if>
+      <if test="jobTitle != null" >
+        #{jobTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherNo != null" >
+        #{teacherNo,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherName != null" >
+        #{teacherName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="score1_1 != null" >
+        #{score1_1,jdbcType=INTEGER},
+      </if>
+      <if test="score1_2 != null" >
+        #{score1_2,jdbcType=INTEGER},
+      </if>
+      <if test="score1_3 != null" >
+        #{score1_3,jdbcType=INTEGER},
+      </if>
+      <if test="score2_1 != null" >
+        #{score2_1,jdbcType=INTEGER},
+      </if>
+      <if test="score2_2 != null" >
+        #{score2_2,jdbcType=INTEGER},
+      </if>
+      <if test="score2_3 != null" >
+        #{score2_3,jdbcType=INTEGER},
+      </if>
+      <if test="score3_1 != null" >
+        #{score3_1,jdbcType=INTEGER},
+      </if>
+      <if test="score3_2 != null" >
+        #{score3_2,jdbcType=INTEGER},
+      </if>
+      <if test="score4_1 != null" >
+        #{score4_1,jdbcType=INTEGER},
+      </if>
+      <if test="score4_2 != null" >
+        #{score4_2,jdbcType=INTEGER},
+      </if>
+      <if test="score5 != null" >
+        #{score5,jdbcType=INTEGER},
+      </if>
+      <if test="score6 != null" >
+        #{score6,jdbcType=INTEGER},
+      </if>
+      <if test="score7 != null" >
+        #{score7,jdbcType=INTEGER},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.inxedu.os.nstar.survey.entity.BookSurveyTeacher" >
+    update survey_book_teacher
+    <set >
+      <if test="bookSurveyId != null" >
+        book_survey_id = #{bookSurveyId,jdbcType=BIGINT},
+      </if>
+      <if test="jobTitle != null" >
+        job_title = #{jobTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        position = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherNo != null" >
+        teacher_no = #{teacherNo,jdbcType=VARCHAR},
+      </if>
+      <if test="teacherName != null" >
+        teacher_name = #{teacherName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="score1_1 != null" >
+        score1_1 = #{score1_1,jdbcType=INTEGER},
+      </if>
+      <if test="score1_2 != null" >
+        score1_2 = #{score1_2,jdbcType=INTEGER},
+      </if>
+      <if test="score1_3 != null" >
+        score1_3 = #{score13,jdbcType=INTEGER},
+      </if>
+      <if test="score2_1 != null" >
+        score2_1 = #{score2_1,jdbcType=INTEGER},
+      </if>
+      <if test="score22 != null" >
+        score2_2 = #{score2_2,jdbcType=INTEGER},
+      </if>
+      <if test="score23 != null" >
+        score2_3 = #{score2_3,jdbcType=INTEGER},
+      </if>
+      <if test="score31 != null" >
+        score3_1 = #{score3_1,jdbcType=INTEGER},
+      </if>
+      <if test="score32 != null" >
+        score3_2 = #{score3_2,jdbcType=INTEGER},
+      </if>
+      <if test="score41 != null" >
+        score4_1 = #{score4_1,jdbcType=INTEGER},
+      </if>
+      <if test="score42 != null" >
+        score4_2 = #{score4_2,jdbcType=INTEGER},
+      </if>
+      <if test="score5 != null" >
+        score5 = #{score5,jdbcType=INTEGER},
+      </if>
+      <if test="score6 != null" >
+        score6 = #{score6,jdbcType=INTEGER},
+      </if>
+      <if test="score7 != null" >
+        score7 = #{score7,jdbcType=INTEGER},
+      </if>
+      <if test="score != null" >
+        score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="memo != null" >
+        memo = #{memo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.inxedu.os.nstar.survey.entity.BookSurveyTeacher" >
+    update survey_book_teacher
+    set book_survey_id = #{bookSurveyId,jdbcType=BIGINT},
+      job_title = #{jobTitle,jdbcType=VARCHAR},
+      position = #{position,jdbcType=VARCHAR},
+      teacher_no = #{teacherNo,jdbcType=VARCHAR},
+      teacher_name = #{teacherName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      score1_1 = #{score11,jdbcType=INTEGER},
+      score1_2 = #{score12,jdbcType=INTEGER},
+      score1_3 = #{score13,jdbcType=INTEGER},
+      score2_1 = #{score21,jdbcType=INTEGER},
+      score2_2 = #{score22,jdbcType=INTEGER},
+      score2_3 = #{score23,jdbcType=INTEGER},
+      score3_1 = #{score31,jdbcType=INTEGER},
+      score3_2 = #{score32,jdbcType=INTEGER},
+      score4_1 = #{score41,jdbcType=INTEGER},
+      score4_2 = #{score42,jdbcType=INTEGER},
+      score5 = #{score5,jdbcType=INTEGER},
+      score6 = #{score6,jdbcType=INTEGER},
+      score7 = #{score7,jdbcType=INTEGER},
+      score = #{score,jdbcType=INTEGER},
+      memo = #{memo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="findBookSurveyTeacherByNo" parameterType="com.inxedu.os.nstar.survey.entity.BookSurveyTeacher" resultMap="BaseResultMap">
+    SELECT * FROM survey_book_teacher WHERE teacher_no=#{teacherNo} and book_survey_id=#{bookSurveyId}
+  </select>
+  <select id="findBookSurveyBySurveyId" parameterType="map" resultMap="BaseResultMap">
+    SELECT * FROM survey_book_teacher WHERE book_survey_id=#{e.bookSurveyId} ORDER  BY score DESC
+    <include refid="publicMapper.pageEnd"/>
+  </select>
+  <select id="findBookSurveyBySurveyIdCount" parameterType="map" resultType="int">
+    SELECT COUNT(*) FROM survey_book_teacher WHERE book_survey_id=#{e.bookSurveyId}
+  </select>
+</mapper>

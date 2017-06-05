@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="SurveyQuestionMapper" >
+    <resultMap id="BaseResultMap" type="com.inxedu.os.nstar.survey.entity.Question" >
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="sort_num" property="sortNum" jdbcType="INTEGER" />
+        <result column="topic" property="topic" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="state" property="state" jdbcType="BIT" />
+        <result column="questionare_id" property="questionareId" jdbcType="BIGINT" />
+        <collection property="items"  ofType="com.inxedu.os.nstar.survey.entity.Items" select="selectIterms" column="id">
+            <id column="id" property="id" jdbcType="BIGINT" />
+            <result column="sort_num" property="sortNum" jdbcType="INTEGER" />
+            <result column="item" property="item" jdbcType="VARCHAR" />
+            <result column="statistics" property="statistics" jdbcType="INTEGER" />
+            <result column="state" property="state" jdbcType="BIT" />
+            <result column="question_id" property="questionId" jdbcType="BIGINT" />
+        </collection>
+    </resultMap>
+    <resultMap id="BasicResultMap" type="com.inxedu.os.nstar.survey.entity.Question">
+        <id column="id" property="id" jdbcType="BIGINT" />
+        <result column="sort_num" property="sortNum" jdbcType="INTEGER" />
+        <result column="topic" property="topic" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="INTEGER" />
+        <result column="state" property="state" jdbcType="BIT" />
+        <result column="questionare_id" property="questionareId" jdbcType="BIGINT" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, sort_num, topic, type, state, questionare_id
+    </sql>
+    <select id="selectIterms" parameterType="long" resultMap="SurveyItemsMapper.BaseResultMap">
+        SELECT c.id,c.sort_num,c.item,c.statistics,c.state,c.question_id FROM survey_iterms c WHERE  c.question_id=#{VALUE}
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+        select
+        <include refid="Base_Column_List" />
+        from survey_question
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+        delete from survey_question
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.inxedu.os.nstar.survey.entity.Question" >
+        insert into survey_question (id, sort_num, topic,
+        type, state, questionare_id
+        )
+        values (#{id,jdbcType=BIGINT}, #{sortNum,jdbcType=INTEGER}, #{topic,jdbcType=VARCHAR},
+        #{type,jdbcType=INTEGER}, #{state,jdbcType=BIT}, #{questionareId,jdbcType=BIGINT}
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="com.inxedu.os.nstar.survey.entity.Question" >
+        insert into survey_question
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="sortNum != null" >
+                sort_num,
+            </if>
+            <if test="topic != null" >
+                topic,
+            </if>
+            <if test="type != null" >
+                type,
+            </if>
+            <if test="state != null" >
+                state,
+            </if>
+            <if test="questionareId != null" >
+                questionare_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="sortNum != null" >
+                #{sortNum,jdbcType=INTEGER},
+            </if>
+            <if test="topic != null" >
+                #{topic,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="state != null" >
+                #{state,jdbcType=BIT},
+            </if>
+            <if test="questionareId != null" >
+                #{questionareId,jdbcType=BIGINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.inxedu.os.nstar.survey.entity.Question" >
+        update survey_question
+        <set >
+            <if test="sortNum != null" >
+                sort_num = #{sortNum,jdbcType=INTEGER},
+            </if>
+            <if test="topic != null" >
+                topic = #{topic,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null" >
+                type = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="state != null" >
+                state = #{state,jdbcType=BIT},
+            </if>
+            <if test="questionareId != null" >
+                questionare_id = #{questionareId,jdbcType=BIGINT},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.inxedu.os.nstar.survey.entity.Question" >
+        update survey_question
+        set sort_num = #{sortNum,jdbcType=INTEGER},
+        topic = #{topic,jdbcType=VARCHAR},
+        type = #{type,jdbcType=INTEGER},
+        state = #{state,jdbcType=BIT},
+        questionare_id = #{questionareId,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="findCountByQuestionareId" parameterType="long" resultType="int">
+        SELECT COUNT(*) from survey_question WHERE  questionare_id=#{VALUE}
+    </select>
+    <select id="findQuestionByQuestionareId" parameterType="long" resultMap="BasicResultMap">
+        SELECT * from survey_question WHERE  questionare_id=#{VALUE}
+    </select>
+    <delete id="dequestionByQuestionareId" parameterType="long">
+        DELETE  FROM SURVEY_QUESTION WHERE  QUESTIONARE_ID=#{VALUE}
+    </delete>
+    <select id="findQuestionIdByQuestionareId" parameterType="long" resultType="java.lang.Long">
+        SELECT * FROM SURVEY_QUESTION WHERE QUESTIONARE_ID =#{VALUE}
+    </select>
+</mapper>
