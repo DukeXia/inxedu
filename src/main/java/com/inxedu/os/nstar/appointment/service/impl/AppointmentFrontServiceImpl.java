@@ -146,7 +146,6 @@ public class AppointmentFrontServiceImpl extends GenericDaoImpl implements Appoi
         if (!(examDate.after(examManager.getAppointmentBeginTime()) && examDate.before(examManager.getAppointmentEndTime()))) {
             return new ApponitmentResult(AppointmentState.ILLEGAL_TIME);
         }
-
         /**
          * 根据批次id查询本次预约批次，检查是否符合条件
          * 1.检查是否为空
@@ -164,8 +163,6 @@ public class AppointmentFrontServiceImpl extends GenericDaoImpl implements Appoi
          *1 随机抽取一个座位
          * 2.更新座位状态
          */
-
-
         List<ExamSeat> examBatchList = queryExamSeatByBatchId(examBatchId);
         if (ObjectUtils.isNull(examBatchList)) {
             return new ApponitmentResult(AppointmentState.NO_SEAT);
@@ -208,8 +205,7 @@ public class AppointmentFrontServiceImpl extends GenericDaoImpl implements Appoi
         examAppointmentLog.setEvents("使数据表:exam_batch中的已预约人数(appointment_count)加一");
         examAppointmentLog.setEventMan("操作人:学号:" + student.getStudentNo());
         examAppointmentLogService.addexamAppointmentLog(examAppointmentLog);
-
-        System.out.println("这里");
+        /*System.out.println("这里");*/
         //将准备好的预约数据插入到预约结果表里
         insertExamStudentAppointment(examStudentAppointment);
         examAppointmentLog.setObject("exam_student_appointment");

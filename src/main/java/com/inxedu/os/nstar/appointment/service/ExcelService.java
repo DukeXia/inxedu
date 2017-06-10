@@ -138,4 +138,6 @@ public interface ExcelService {
 
 	//======导入 ExamStudentAppointment表 部分===结束====================================
 	String updateExcelToScore(HttpServletRequest request, MultipartFile myfile);
+
+	ArrayList<ArrayList<String>> findExamAppointmentDataWIthExamNo(String examName);
 }

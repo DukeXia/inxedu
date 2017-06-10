@@ -1,9 +1,6 @@
 package com.inxedu.os.nstar.appointment.controller;
 
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,13 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.inxedu.os.nstar.appointment.controller.ExcelFileGenerator;
 import com.inxedu.os.nstar.appointment.service.ExcelService;
 
 @Controller
@@ -510,7 +505,8 @@ public class ExcelController extends BaseController{
 		ArrayList<String> headlist = excelService.getExamStudentAppointmentHead();
 		// 得到数
 	  examName=request.getParameter("examName");
-		ArrayList<ArrayList<String>> dataList = excelService.getExamStudentAppointmentDataByName(examName);
+		/*ArrayList<ArrayList<String>> dataList = excelService.getExamStudentAppointmentDataByName(examName);*/
+	ArrayList<ArrayList<String>> dataList=excelService.findExamAppointmentDataWIthExamNo(examName);
 		String type = examName;
 		exportFiletoExcel(headlist, dataList, type, response);
 		return;

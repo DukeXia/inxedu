@@ -1,5 +1,6 @@
 package com.inxedu.os.nstar.survey.controller.systerm;
 
+import com.inxedu.os.common.controller.BaseController;
 import com.inxedu.os.nstar.survey.entity.Result;
 import com.inxedu.os.nstar.survey.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/admin/surveyresult")
-public class SurveyResultController {
+public class SurveyResultController extends BaseController{
     //       /admin/surveyresult/list
     @Autowired
     private ResultService resultService;

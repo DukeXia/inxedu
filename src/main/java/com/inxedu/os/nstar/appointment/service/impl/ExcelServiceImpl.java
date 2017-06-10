@@ -33,7 +33,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -42,29 +41,33 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
     @Autowired
     private TeacherService teacherService;
-    public ArrayList<String> getMyStudentHead(){
-        ArrayList<String> headList=new ArrayList<>();
+
+    public ArrayList<String> getMyStudentHead() {
+        ArrayList<String> headList = new ArrayList<>();
         headList.add("考号");
         headList.add("学号");
         headList.add("姓名");
         headList.add("班级");
-     return headList;
-   }
-    public  ArrayList<ArrayList<String>> getMystudent(int teacherId){
+        return headList;
+    }
+
+    public ArrayList<ArrayList<String>> getMystudent(int teacherId) {
         ArrayList<ArrayList<String>> dataList = new
                 ArrayList<ArrayList<String>>();
-       List<ExamStudent> examStudentList=this.selectList("ExamStudentMapper.queryMyStudentByTeacherId",teacherId);
-        List<List<String>> list =  examExamStudentJoint(examStudentList);
+        List<ExamStudent> examStudentList = this.selectList("ExamStudentMapper.queryMyStudentByTeacherId", teacherId);
+        List<List<String>> list = examExamStudentJoint(examStudentList);
         for (int i = 0; i < list.size(); i++) {
             ArrayList<String> al = (ArrayList<String>) list.get(i);
             dataList.add(al);
         }
-       return  dataList;
+        return dataList;
     }
 
     @Override
@@ -100,28 +103,28 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
                         String studentName = getStringCellValue(row.getCell((short) 1));// studentName姓名
                         String examName = getStringCellValue(row.getCell((short) 2));// studentClass班级
                         String score = getStringCellValue(row.getCell((short) 3));// courseCode考试课程代码
-                        if(studentNo.isEmpty()&&studentName.isEmpty()&&examName.isEmpty()&&score.isEmpty()){
+                        if (studentNo.isEmpty() && studentName.isEmpty() && examName.isEmpty() && score.isEmpty()) {
                             continue;
                         }
                         // lock锁定
                         // 校验
                         // ===============================
                         if (studentNo == null || "".equals(studentNo)) {
-                            msg += "第" + (j+1) + "行  学号  不能为空<br/>";
+                            msg += "第" + (j + 1) + "行  学号  不能为空<br/>";
                         }
                         if (ObjectUtils.isNull(studentName) || "".equals(studentName)) {
-                            msg += "第" + (j+1) + "行  姓名  不能为空<br/>";
+                            msg += "第" + (j + 1) + "行  姓名  不能为空<br/>";
                         }
                         ExamManager examManager = examManagerService.queryExamManagerByExamName(examName);
-                        if(examManager==null){
-                            msg+="第"+(j+1) + "行  考试名称  不能为空<br/>";
+                        if (examManager == null) {
+                            msg += "第" + (j + 1) + "行  考试名称  不能为空<br/>";
                         }
                         Integer id = userService.queryUserByNoNotPage(studentNo);
                         if (id == null) {
-                            msg += "<br>" + "第" + (j+1) + "行" + "学号:"+studentNo+"在edu_user表里不存在<br/>";
+                            msg += "<br>" + "第" + (j + 1) + "行" + "学号:" + studentNo + "在edu_user表里不存在<br/>";
                         }
                         // 考试课程代码
-                        ExamStudentAppointment examStudentAppointment=new ExamStudentAppointment();
+                        ExamStudentAppointment examStudentAppointment = new ExamStudentAppointment();
                         examStudentAppointment.setStudentNo(studentNo);
                         examStudentAppointment.setExamName(examName);
                         examStudentAppointment.setScore(score);
@@ -141,6 +144,41 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
         return msg;
     }
 
+    @Override
+    public ArrayList<ArrayList<String>> findExamAppointmentDataWIthExamNo(String examName) {
+        ArrayList<ArrayList<String>> dataList = new ArrayList<ArrayList<String>>();
+        List<HyberExamSudentAppointment> examAppoinmentWithExamNoList = getExamAppoinmentWithExamNo(examName);
+        List<HyberExamSudentAppointment> hyberlist = getCollegeNameToResult(examAppoinmentWithExamNoList);
+        List<List<String>> list = examStudentAppointmentJoint(hyberlist);
+        for (int i=0; i < list.size(); i++) {
+            ArrayList<String> al = (ArrayList<String>) list.get(i);
+            dataList.add(al);
+        }
+        return dataList;
+    }
+
+    private List<HyberExamSudentAppointment> getCollegeNameToResult(List<HyberExamSudentAppointment> examAppoinmentWithExamNoList) {
+
+        Stream s= examAppoinmentWithExamNoList.parallelStream()
+                .map(t->addCollegeName(t,stuClassService.queryClassIdByName(t.getStudentClass())));
+        return (List<HyberExamSudentAppointment>) s.collect(Collectors.toList());
+    }
+
+    private HyberExamSudentAppointment addCollegeName(HyberExamSudentAppointment hyber, List<Integer> integerList) {
+        if (ObjectUtils.isNotNull(integerList)) {
+            StuClass stuClassById = stuClassService.getStuClassById(integerList.get(0));
+            College collegeById = college.getCollegeById(stuClassById.getSchoolId());
+            hyber.setCollegeName(collegeById.getCollegeName());
+        } else {
+            hyber.setCollegeName("暂无");
+        }
+        return hyber;
+    }
+
+    private List<HyberExamSudentAppointment> getExamAppoinmentWithExamNo(String examName) {
+        return this.selectList("ExamStudentAppointmentMapper.queryAllExamStudentAppointmentAndExamNoByExamManagerName",examName);
+    }
+
     // 辅助函数，查重
     private boolean checkStudentNo(String studentNo) {
 
@@ -156,9 +194,9 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
 
     private List<List<String>> examExamStudentJoint(List<ExamStudent> examStudentList) {
         List<List<String>> list = new ArrayList<List<String>>();
-        for (ExamStudent e:examStudentList
-             ) {
-            List<String> small=new ArrayList<>();
+        for (ExamStudent e : examStudentList
+                ) {
+            List<String> small = new ArrayList<>();
             small.add(e.getExamNo());
             small.add(e.getStudentNo());
             small.add(e.getStudentName());
@@ -336,8 +374,9 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
         }
         return list;
     }
-   @Autowired
-   private ExamManagerService examManagerService;
+
+    @Autowired
+    private ExamManagerService examManagerService;
 
     public String updateExcelToExamBatch(HttpServletRequest request,
                                          MultipartFile myFile) throws Exception {
@@ -355,7 +394,7 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
                 XSSFSheet sheet = wookbook.getSheetAt(i);
 
                 int rows = sheet.getLastRowNum();// 指的行数，一共有多少行+
-                if (rows == 0&&i==0) {
+                if (rows == 0 && i == 0) {
                     throw new BaseException("请填写数据");
                 }
                 for (int j = 1; j <= rows + 1; j++) {
@@ -367,16 +406,16 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
                         // examClassroom examBatchNo examDate examBeginEndTime courseNo
                         // state
                         String examName = getStringCellValue(row.getCell((short) 0));// 考试名称
-                        Integer examBatchNo =getIntCellValue(row.getCell((short) 1));// 考试批次号
-                        String examClassRoomName=getStringCellValue(row.getCell(2));//考场名称
+                        Integer examBatchNo = getIntCellValue(row.getCell((short) 1));// 考试批次号
+                        String examClassRoomName = getStringCellValue(row.getCell(2));//考场名称
                         String examDate_s = getCell(row.getCell((short) 3));// 考试日期
                         Date examDate = null;
                         String examBeginEndTime = getStringCellValue(row.getCell((short) 4));// 考试时间段
                         String courseNo = getStringCellValue(row.getCell((short) 5));// 考试课程代码
                         String state = getStringCellValue(row.getCell((short) 6));// 状态
-                        String momo=getStringCellValue(row.getCell(7));//备注
-                        Integer number=getIntCellValue(row.getCell(8));//人数
-                        if(examName.isEmpty()&&examBatchNo==-1&&examClassRoomName.isEmpty()&&examDate_s.isEmpty()&&momo.isEmpty()){
+                        String momo = getStringCellValue(row.getCell(7));//备注
+                        Integer number = getIntCellValue(row.getCell(8));//人数
+                        if (examName.isEmpty() && examBatchNo == -1 && examClassRoomName.isEmpty() && examDate_s.isEmpty() && momo.isEmpty()) {
                             continue;
                         }
                         Boolean state1 = null;
@@ -385,9 +424,9 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
                                 || examName.equals("")) {
                             msg += "第" + j + "行  考试名称  不能为空<br/>";
                         }
-                       ExamManager examManager= examManagerService.queryExamManagerByExamName(examName);
+                        ExamManager examManager = examManagerService.queryExamManagerByExamName(examName);
                         if (ObjectUtils.isNull(examManager)) {
-                            msg += "第" + j + "行 "+examName+" 在考试管理表里不存在<br/>";
+                            msg += "第" + j + "行 " + examName + " 在考试管理表里不存在<br/>";
                         }
 
                         if (ObjectUtils.isNull(examBatchNo)) {
@@ -425,10 +464,10 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
                             }
                         }
                         ExamBatch examBatch = new ExamBatch();
-                    ExamClassroom  examClassroom=examClassroomService.queryClassRoomByName(examClassRoomName);
-                        if (ObjectUtils.isNull(examClassroom)){
+                        ExamClassroom examClassroom = examClassroomService.queryClassRoomByName(examClassRoomName);
+                        if (ObjectUtils.isNull(examClassroom)) {
                             msg += "第" + j + "行   考场名称在考场表里不存在<br/>";
-                        }else {
+                        } else {
                             examBatch.setNumber(examClassroom.getMaxNumber());
                         }
                         examBatch.setAppointmentCount(0);
@@ -438,7 +477,7 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
                         examBatch.setExamBatchNo(examBatchNo);// 批次
                         examBatch.setExamDate(examDate);// 考试日期
                         examBatch.setExamBeginEndTime(examBeginEndTime);// 考试时间
-                        if(ObjectUtils.isNotNull(examCourse)){
+                        if (ObjectUtils.isNotNull(examCourse)) {
                             examBatch.setCourseName(examCourse.getCourseName());
 
 
@@ -447,7 +486,7 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
                         examBatch.setMemo(momo);
 
                         examBatch.setCourseNo(courseNo);// 科目代码
-                        if(ObjectUtils.isNotNull(examManager)){
+                        if (ObjectUtils.isNotNull(examManager)) {
                             examBatch.setExamManagerId(examManager.getId());
                         }
 
@@ -459,26 +498,27 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
             }
             if (msg == null || msg.equals("")) {
                 // --------------批量保存
-                for (ExamBatch examBatch:examBatchList
-                     ) {
-                   Long  l= this.insert("ExamBatchMapper.insert", examBatch);
-                        for (int i =1; i <= examBatch.getNumber(); i++) {
-                            ExamSeat examSeat=new ExamSeat();
-                    examSeat.setSeatNo(i);
-                    examSeat.setState(false);
-                    examSeat.setExamClassroomName(examBatch.getExamClassroom());
-                    examSeat.setExamBatchId(examBatch.getId());
-                    examSeatService.addExamSeat(examSeat);}
+                for (ExamBatch examBatch : examBatchList
+                        ) {
+                    Long l = this.insert("ExamBatchMapper.insert", examBatch);
+                    for (int i = 1; i <= examBatch.getNumber(); i++) {
+                        ExamSeat examSeat = new ExamSeat();
+                        examSeat.setSeatNo(i);
+                        examSeat.setState(false);
+                        examSeat.setExamClassroomName(examBatch.getExamClassroom());
+                        examSeat.setExamBatchId(examBatch.getId());
+                        examSeatService.addExamSeat(examSeat);
+                    }
 
                 }
-            }else {
+            } else {
                 return msg;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-           return "系统异常";
+            return "系统异常";
         }
-        return  msg;
+        return msg;
 
     }
 
@@ -498,6 +538,7 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
         return headlist;
 
     }
+
     private List<ExamClassroom> queryAllExamClassroom() {
 
         return this.selectList("ExamClassroomMapper.queryAllExamClassroom",
@@ -616,6 +657,7 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
         return msg;
 
     }
+
     // // ======导入 ExamClassroom表 部分===结束====================================
     //
     public String getCell(HSSFCell cell) {
@@ -642,7 +684,9 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
                 return cell.getErrorCellValue() + "";
         }
         return "";
-    }public String getCell(XSSFCell cell) {
+    }
+
+    public String getCell(XSSFCell cell) {
         DecimalFormat df = new DecimalFormat("#");
         if (cell == null)
             return "";
@@ -852,62 +896,61 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
                                            MultipartFile myFile) throws Exception {
 
         String msg = "";
-        List<ExamManager> examManagers=new ArrayList<ExamManager>();
-        try(InputStream inputStream=myFile.getInputStream() ){
-        HSSFWorkbook wookbook = new HSSFWorkbook(inputStream);
-           Iterator<Sheet> iterator= wookbook.iterator();
-            int count=0;
-         if (iterator.hasNext()){
-             count++;
-             iterator.next();
-         }
+        List<ExamManager> examManagers = new ArrayList<ExamManager>();
+        try (InputStream inputStream = myFile.getInputStream()) {
+            HSSFWorkbook wookbook = new HSSFWorkbook(inputStream);
+            Iterator<Sheet> iterator = wookbook.iterator();
+            int count = 0;
+            if (iterator.hasNext()) {
+                count++;
+                iterator.next();
+            }
             for (int i = 0; i < count; i++) {
 
-                HSSFSheet sheet=wookbook.getSheetAt(i);
-        int rows = sheet.getLastRowNum();// 指的行数，一共有多少行+
-        if (rows == 0&&i==0) {
-            throw new BaseException("请填写数据");
-        }
-        for (int j = 1; j <= rows + 1; j++) {
-            // 读取左上端单元格
-            HSSFRow row = sheet.getRow(j);
-            // 行不为空
-            if (row != null) {
-                // **读取cell**
-                String examName = getStringCellValue(row.getCell((short) 0));// examName
-                Date appointmentBeginTime = getDateCellValue(row
-                        .getCell((short) 1));// appointmentBeginTime
-                Date appointmentEndTime = getDateCellValue(row
-                        .getCell((short) 2));// appointmentEndTime
-                Boolean isCourseController = getBoolCellValue(row
-                        .getCell((short) 3));// isCourseController
-                Boolean state = getBoolCellValue(row.getCell((short) 4));// state
-                String memo = getStringCellValue(row.getCell((short) 5));// memo
+                HSSFSheet sheet = wookbook.getSheetAt(i);
+                int rows = sheet.getLastRowNum();// 指的行数，一共有多少行+
+                if (rows == 0 && i == 0) {
+                    throw new BaseException("请填写数据");
+                }
+                for (int j = 1; j <= rows + 1; j++) {
+                    // 读取左上端单元格
+                    HSSFRow row = sheet.getRow(j);
+                    // 行不为空
+                    if (row != null) {
+                        // **读取cell**
+                        String examName = getStringCellValue(row.getCell((short) 0));// examName
+                        Date appointmentBeginTime = getDateCellValue(row
+                                .getCell((short) 1));// appointmentBeginTime
+                        Date appointmentEndTime = getDateCellValue(row
+                                .getCell((short) 2));// appointmentEndTime
+                        Boolean isCourseController = getBoolCellValue(row
+                                .getCell((short) 3));// isCourseController
+                        Boolean state = getBoolCellValue(row.getCell((short) 4));// state
+                        String memo = getStringCellValue(row.getCell((short) 5));// memo
 
-                ExamManager examManager = new ExamManager();
-                examManager.setExamName(examName);
-                examManager.setAppointmentBeginTime(appointmentBeginTime);
-                examManager.setAppointmentEndTime(appointmentEndTime);
-                examManager.setIsCourseController(isCourseController);
-                examManager.setState(state);
-                examManager.setMemo(memo);
-                examManagers.add(examManager);
-            }
-        }
+                        ExamManager examManager = new ExamManager();
+                        examManager.setExamName(examName);
+                        examManager.setAppointmentBeginTime(appointmentBeginTime);
+                        examManager.setAppointmentEndTime(appointmentEndTime);
+                        examManager.setIsCourseController(isCourseController);
+                        examManager.setState(state);
+                        examManager.setMemo(memo);
+                        examManagers.add(examManager);
+                    }
+                }
 
-        }
-        if ("".equals(msg)){
-            return msg;
-        }else {
-            for (ExamManager examManager:examManagers
-                 ) {
-                this.insert("ExamManagerMapper.save", examManager);
             }
-        }
-        }
-        catch (Exception e){
-            for (ExamManager examManager:examManagers
-                 ) {
+            if ("".equals(msg)) {
+                return msg;
+            } else {
+                for (ExamManager examManager : examManagers
+                        ) {
+                    this.insert("ExamManagerMapper.save", examManager);
+                }
+            }
+        } catch (Exception e) {
+            for (ExamManager examManager : examManagers
+                    ) {
                 this.insert("ExamManagerMapper.save", examManager);
             }
             return "系统异常";
@@ -915,6 +958,7 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
         return msg;
     }
     // ======导入 ExamManager表 部分===结束====================================
+
     /**
      * ExamSeat表
      *
@@ -929,9 +973,11 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
         headlist.add("考试id");
         return headlist;
     }
+
     private List<ExamSeat> queryAllExamSeat() {
         return this.selectList("ExamSeatMapper.queryAllExamSeatExport", null);
     }
+
     public ArrayList<ArrayList<String>> getExamSeatData() {
         ArrayList<ArrayList<String>> dataList = new
                 ArrayList<ArrayList<String>>();
@@ -958,6 +1004,7 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
         }
         return list;
     }
+
     // ======导出 ExamSeat表 部分===结束====================================
     @Autowired
     ExamBatchService examBatchService;
@@ -965,6 +1012,7 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
     ExamSeatService examSeatService;
     @Autowired
     ExamClassroomService examClassroomService;
+
     @Override
     public boolean equals(Object obj) {
         return super.equals(obj);
@@ -1018,7 +1066,7 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
                         }
                         String state = getStringCellValue(row.getCell(3));// 状态
                         if ("".equals(state)) {
-                            msg += "<br/>" + "第" + j + "行状态:" +"不能为空";
+                            msg += "<br/>" + "第" + j + "行状态:" + "不能为空";
                         }
                         ExamSeat examSeat = new ExamSeat();
                         examSeat.setSeatNo(seatNo);
@@ -1084,7 +1132,7 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
     public ArrayList<ArrayList<String>> getExamStudentData() {
         ArrayList<ArrayList<String>> dataList = new ArrayList<ArrayList<String>>();
         List<ExamStudent> examStudentList = queryAllExamStudent();
-        List<HyberExamStudent> hyberExamStudents=ChanggetoHyberExmaStudent(examStudentList);
+        List<HyberExamStudent> hyberExamStudents = ChanggetoHyberExmaStudent(examStudentList);
         List<List<String>> list = examStudentJoint(hyberExamStudents);
         for (int i = 0; i < list.size(); i++) {
             ArrayList<String> al = (ArrayList<String>) list.get(i);
@@ -1092,18 +1140,19 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
         }
         return dataList;
     }
-    public List<HyberExamStudent> ChanggetoHyberExmaStudent(List<ExamStudent> examStudentList){
-        List<HyberExamStudent> list=new ArrayList<>();
-        for (ExamStudent examStudent:examStudentList
+
+    public List<HyberExamStudent> ChanggetoHyberExmaStudent(List<ExamStudent> examStudentList) {
+        List<HyberExamStudent> list = new ArrayList<>();
+        for (ExamStudent examStudent : examStudentList
                 ) {
-            HyberExamStudent hyber=new HyberExamStudent();
+            HyberExamStudent hyber = new HyberExamStudent();
 
             Integer id = userService.queryUserByNoNotPage(examStudent.getStudentNo());
-           User user= userService.queryUserById(id);
-            if(ObjectUtils.isNotNull(user)){
+            User user = userService.queryUserById(id);
+            if (ObjectUtils.isNotNull(user)) {
 
                 hyber.setIdcard(user.getIdCard());
-            }else {
+            } else {
                 hyber.setIdcard("暂无");
             }
             hyber.setStudentNo(user.getNo());
@@ -1116,6 +1165,7 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
         }
         return list;
     }
+
     // 辅助函数
     private List<List<String>> examStudentJoint(
             List<HyberExamStudent> examStudentList) {
@@ -1177,7 +1227,7 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
                         String studentClass = getStringCellValue(row.getCell((short) 2));// studentClass班级
                         String courseCode = getStringCellValue(row.getCell((short) 3));// courseCode考试课程代码
                         String lock = getStringCellValue(row.getCell((short) 4));//
-                        if(studentNo.isEmpty()&&studentName.isEmpty()&&studentClass.isEmpty()&&courseCode.isEmpty()&&lock.isEmpty()){
+                        if (studentNo.isEmpty() && studentName.isEmpty() && studentClass.isEmpty() && courseCode.isEmpty() && lock.isEmpty()) {
                             continue;
                         }
                         // lock锁定
@@ -1185,42 +1235,42 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
                         // 校验
                         // ===============================
                         if (studentNo == null || "".equals(studentNo)) {
-                            msg += "第" + (j+1) + "行  学号  不能为空<br/>";
+                            msg += "第" + (j + 1) + "行  学号  不能为空<br/>";
                         } else {
                             // 查重检验
                             if (checkStudentNo(studentNo)) {
                                 // true为重复了。
-                                msg += "第" + (j +1)+ "行  学号  "+studentNo+"在数据库 中 已存在 <br/>";
+                                msg += "第" + (j + 1) + "行  学号  " + studentNo + "在数据库 中 已存在 <br/>";
                                 // false为没有重复。
                             }
                         }
                         if (ObjectUtils.isNull(studentName) || "".equals(studentName)) {
-                            msg += "第" + (j+1) + "行  姓名  不能为空<br/>";
+                            msg += "第" + (j + 1) + "行  姓名  不能为空<br/>";
                         }
                         // 班级
                         if (StringUtils.isEmpty(studentClass)) {
-                            msg += "第" + (j +1)+ "行  班级  不能为空<br/>";
+                            msg += "第" + (j + 1) + "行  班级  不能为空<br/>";
                         }
                         Integer id = userService.queryUserByNoNotPage(studentNo);
                         if (id == null) {
-                            msg += "<br>" + "第" + (j+1) + "行" + "学号:"+studentNo+"在edu_user表里不存在<br/>";
+                            msg += "<br>" + "第" + (j + 1) + "行" + "学号:" + studentNo + "在edu_user表里不存在<br/>";
                         }
                         List<Integer> integerList = stuClassService.queryClassIdByName(studentClass);
                         if (integerList.isEmpty()) {
-                            msg += "第" + (j +1)+ "行  班级"+studentClass+" 在班级表里不存在<br/>";
+                            msg += "第" + (j + 1) + "行  班级" + studentClass + " 在班级表里不存在<br/>";
                         }
 
                         // 考试课程代码
                         if (StringUtils.isBlank(courseCode)) {
-                            msg += "第" + (j+1) + "行  考试课程代码  不能为空<br/>";
+                            msg += "第" + (j + 1) + "行  考试课程代码  不能为空<br/>";
                         }
                         ExamCourse examCourse = examCourseService.queryCourseByCode(courseCode);
                         if (examCourse == null) {
-                            msg += "第" + (j +1)+ "行  考试课程代码在考试课程表里不存在<br/>";
+                            msg += "第" + (j + 1) + "行  考试课程代码在考试课程表里不存在<br/>";
                         }
                         // 锁定
                         if (ObjectUtils.isNull(lock) || lock.equals("")) {
-                            msg += "第" + (j+1) + "行  锁定  不能为空<br/>";
+                            msg += "第" + (j + 1) + "行  锁定  不能为空<br/>";
                         } else {
                             if (lock.equals("未锁定")) {
                                 lock1 = false;
@@ -1271,6 +1321,7 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
     // 部分===开始====================================
     public ArrayList<String> getExamStudentAppointmentHead() {
         ArrayList<String> headlist = new ArrayList<String>();
+        headlist.add("考号");
         headlist.add("学号");
         headlist.add("姓名");
         headlist.add("班级");
@@ -1279,25 +1330,28 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
         headlist.add("时间");
         headlist.add("批次号");
         headlist.add("座位号");
-       headlist.add("备注");
+        headlist.add("备注");
         return headlist;
     }
+
     private List<ExamStudentAppointment> queryAllExamStudentAppointment(int id) {
 
         return this.selectList(
                 "ExamStudentAppointmentMapper.queryAllExamStudentAppointmentById",
                 id);
     }
+
     private List<ExamStudentAppointment> queryAllExamStudentAppointmentByExamManagerName(String examName) {
 
         return this.selectList(
                 "ExamStudentAppointmentMapper.queryAllExamStudentAppointmentByExamManagerName",
                 examName);
     }
+
     public ArrayList<ArrayList<String>> getExamStudentAppointmentData(int id) {
         ArrayList<ArrayList<String>> dataList = new ArrayList<ArrayList<String>>();
         List<ExamStudentAppointment> examStudentAppointmentList = queryAllExamStudentAppointment(id);
-        List<HyberExamSudentAppointment> hyberlist=ChanggetoHyber(examStudentAppointmentList);
+        List<HyberExamSudentAppointment> hyberlist = ChanggetoHyber(examStudentAppointmentList);
 
         List<List<String>> list = examStudentAppointmentJoint(hyberlist);
         for (int i = 0; i < list.size(); i++) {
@@ -1306,10 +1360,11 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
         }
         return dataList;
     }
+
     public ArrayList<ArrayList<String>> getExamStudentAppointmentDataByName(String name) {
         ArrayList<ArrayList<String>> dataList = new ArrayList<ArrayList<String>>();
         List<ExamStudentAppointment> examStudentAppointmentList = queryAllExamStudentAppointmentByExamManagerName(name);
-        List<HyberExamSudentAppointment> hyberlist=ChanggetoHyber(examStudentAppointmentList);
+        List<HyberExamSudentAppointment> hyberlist = ChanggetoHyber(examStudentAppointmentList);
         List<List<String>> list = examStudentAppointmentJoint(hyberlist);
         for (int i = 0; i < list.size(); i++) {
             ArrayList<String> al = (ArrayList<String>) list.get(i);
@@ -1317,25 +1372,21 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
         }
         return dataList;
     }
+
     @Autowired
     private StuClassService stuClassService;
     @Autowired
     private CollegeService college;
+
     //加上学院
-    protected  List<HyberExamSudentAppointment> ChanggetoHyber(List<ExamStudentAppointment> examStudentAppointmentList){
-        List<HyberExamSudentAppointment> list=new ArrayList<>();
-        for (ExamStudentAppointment examStudentAppointment:examStudentAppointmentList
-             ) {
-            HyberExamSudentAppointment hyber=new HyberExamSudentAppointment();
+    protected List<HyberExamSudentAppointment> ChanggetoHyber(List<ExamStudentAppointment> examStudentAppointmentList) {
+        List<HyberExamSudentAppointment> list = new ArrayList<>();
+        for (ExamStudentAppointment examStudentAppointment : examStudentAppointmentList
+                ) {
+            HyberExamSudentAppointment hyber = new HyberExamSudentAppointment();
 
             List<Integer> integerList = stuClassService.queryClassIdByName(examStudentAppointment.getStudentClass());
-            if(ObjectUtils.isNotNull(integerList)){
-                StuClass stuClassById = stuClassService.getStuClassById(integerList.get(0));
-                College collegeById = college.getCollegeById(stuClassById.getSchoolId());
-                hyber.setCollegeName(collegeById.getCollegeName());
-            }else {
-                hyber.setCollegeName("暂无");
-            }
+            hyber=addCollegeName(hyber,integerList);
             hyber.setBatchNo(examStudentAppointment.getBatchNo());
             hyber.setSeatNo(examStudentAppointment.getSeatNo());
             hyber.setExamBeginEndTimes(examStudentAppointment.getExamBeginEndTimes());
@@ -1350,6 +1401,7 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
         }
         return list;
     }
+
     // 辅助函数
     private List<List<String>> examStudentAppointmentJoint(
             List<HyberExamSudentAppointment> examStudentAppointmentList) {
@@ -1357,18 +1409,17 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
         List<List<String>> list = new ArrayList<List<String>>();
         for (int i = 0; i < examStudentAppointmentList.size(); i++) {
             List<String> small = new ArrayList<String>();
+            small.add(examStudentAppointmentList.get(i).getExamNo());//考号
             small.add(examStudentAppointmentList.get(i).getStudentNo() + "");// studentNo
             small.add(examStudentAppointmentList.get(i).getStudentName() + "");// studentName
             small.add(examStudentAppointmentList.get(i).getStudentClass() + "");// studentClass
-            small.add(examStudentAppointmentList.get(i).getCollegeName()+"");//collegeName
+            small.add(examStudentAppointmentList.get(i).getCollegeName() + "");//collegeName
             small.add(examStudentAppointmentList.get(i).getExamClassroom() + "");// examClassroom
             small.add(sdf.format(examStudentAppointmentList.get(i).getExamDate())
-                    +" "+ examStudentAppointmentList.get(i).getExamBeginEndTimes());// examDate
-          small.add(examStudentAppointmentList.get(i).getBatchNo() + "");// batchNo
+                    + " " + examStudentAppointmentList.get(i).getExamBeginEndTimes());// examDate
+            small.add(examStudentAppointmentList.get(i).getBatchNo() + "");// batchNo
             small.add(examStudentAppointmentList.get(i).getSeatNo() + "");// seatNo*/
-           small.add(examStudentAppointmentList.get(i).getMemo());
-            /*small.add(examStudentAppointmentList.get(i).getBatchNo() + "");// batchNo
-            small.add(examStudentAppointmentList.get(i).getSeatNo() + "");// seatNo*/
+            small.add(examStudentAppointmentList.get(i).getMemo());
             list.add(small);
         }
         return list;
@@ -1493,20 +1544,20 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
 
 
     @Override
-    public String matchTeacherAndStudent(HttpServletRequest request, MultipartFile myFile){
-        List<ExamStudent> list=new ArrayList<ExamStudent>(200);
-        String msg="";
+    public String matchTeacherAndStudent(HttpServletRequest request, MultipartFile myFile) {
+        List<ExamStudent> list = new ArrayList<ExamStudent>(200);
+        String msg = "";
         String myFileName = myFile.getName();
 
         try (InputStream inputStream = myFile.getInputStream();) {
-                 Iterator<Sheet> iterator=null;
+            Iterator<Sheet> iterator = null;
 
 
-                 XSSFWorkbook wookbook=null;
+            XSSFWorkbook wookbook = null;
 
 
-                wookbook= new XSSFWorkbook(inputStream);
-                iterator=wookbook.iterator();
+            wookbook = new XSSFWorkbook(inputStream);
+            iterator = wookbook.iterator();
 
 
             Integer count = 0;
@@ -1529,18 +1580,18 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
                         String examNumber = getStringCellValue(row.getCell((short) 0));//考号
                         String studentNo = getStringCellValue(row.getCell((short) 1));// studentNo
                         String studentName = getStringCellValue(row.getCell((short) 2));// studentName
-                        String className=getStringCellValue(row.getCell((short)3));//班级名称
-                        String coursename= getStringCellValue(row.getCell((short) 5));//课程名称
-                        String teacherName=getStringCellValue(row.getCell((short) 6));//老师名字
+                        String className = getStringCellValue(row.getCell((short) 3));//班级名称
+                        String coursename = getStringCellValue(row.getCell((short) 5));//课程名称
+                        String teacherName = getStringCellValue(row.getCell((short) 6));//老师名字
                        /* ExamCourse examCourse=examCourseService.queryCourseByCourseName(coursename);
                         if(examCourse==null){
                         msg+= "<br>" + "第" + j + "行的课程："+coursename+"在数据库里不存在";
                         }*/
-                        if(checkStudentNo(studentNo)){
-                            Integer teacherId = this.selectOne("TeacherMapper.queryTeacerIdByTeacherName",teacherName);
-                            if(teacherId!=null&&teacherId>0){
+                        if (checkStudentNo(studentNo)) {
+                            Integer teacherId = this.selectOne("TeacherMapper.queryTeacerIdByTeacherName", teacherName);
+                            if (teacherId != null && teacherId > 0) {
 
-                                ExamStudent examStudent=new ExamStudent();
+                                ExamStudent examStudent = new ExamStudent();
                                 examStudent.setStudentNo(studentNo);
                                 examStudent.setTeacherId(teacherId);
                                 examStudent.setExamNo(examNumber);
@@ -1549,25 +1600,25 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
                                 examStudent.setCourseCode(examCourse.getCourseCode());
                                 examStudent.setCourseName(examCourse.getCourseName());}*/
                                 list.add(examStudent);
-                            }else{
-                                msg += "<br>" + "第" + j + "行的老师："+teacherName+"在数据库里不存在";
+                            } else {
+                                msg += "<br>" + "第" + j + "行的老师：" + teacherName + "在数据库里不存在";
                             }
-                        }else{
-                            msg += "<br>" + "第" + j + "行的学生："+studentNo+studentName+"在数据库里不存在";
+                        } else {
+                            msg += "<br>" + "第" + j + "行的学生：" + studentNo + studentName + "在数据库里不存在";
                         }
                     }
                 }
             }
             if (msg == null || "".equals(msg)) {
                 // --------------批量保存
-                for (ExamStudent examStudent :list
+                for (ExamStudent examStudent : list
                         ) {
-                    this.update("ExamStudentMapper.updateTeacherId",examStudent);
+                    this.update("ExamStudentMapper.updateTeacherId", examStudent);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            msg+="系统错误";
+            msg += "系统错误";
         }
         return msg;
     }
@@ -1646,6 +1697,7 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
         }
         return value.trim();
     }
+
     public String getStringCellValue(XSSFCell cell) {
         String value = "";
         if (cell != null) {
@@ -1666,6 +1718,7 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
         }
         return value.trim();
     }
+
     //
     // /**
     // * 获得Hsscell内容 转换成int类型
@@ -1684,7 +1737,9 @@ public class ExcelServiceImpl extends GenericDaoImpl implements ExcelService {
         }
 
         return intValue;
-    } public int getIntCellValue(XSSFCell cell) {
+    }
+
+    public int getIntCellValue(XSSFCell cell) {
         String stringValue = getStringCellValue(cell);
 
         int intValue = -1;
