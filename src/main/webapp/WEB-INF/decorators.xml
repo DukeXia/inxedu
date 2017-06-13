@@ -21,7 +21,7 @@
 		<pattern>/teacher</pattern>
 		<pattern>/bookSurvey/select*</pattern>
 		<pattern>/bookSurvey/selectExperimentByName</pattern>
-		<!--<pattern>/teacher/main/login</pattern>-->
+		<pattern>/secondclass/user/toRegist</pattern>
 	</excludes>
 	<!--教师端管理布局-->
 	<decorator name="teacherdefault" page="teacher/default.jsp">
