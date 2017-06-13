@@ -11,15 +11,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>regist</title>
-    <link href="css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
-    <link href="css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
-    <link href="css/animate.min.css" rel="stylesheet">
-    <link href="css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="/static/secondclass/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="/static/secondclass/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="/static/secondclass/css/animate.min.css" rel="stylesheet">
+    <link href="/static/secondclass/css/style.min862f.css?v=4.1.0" rel="stylesheet">
 </head>
 <body>
 <div class="ibox float-e-margins">
     <div class="ibox-title">
-        <h5>第二课堂成员注册</h5>
+        <h4>第二课堂成员注册</h4>
         <div class="ibox-tools">
             <a class="collapse-link">
                 <i class="fa fa-chevron-up"></i>
@@ -44,7 +44,7 @@
                 <label class="col-sm-3 control-label">姓氏：</label>
                 <div class="col-sm-8">
                     <input id="firstname" name="firstname" class="form-control" type="text">
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 这里写点提示的内容</span>
+                    <%--<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 这里写点提示的内容</span>--%>
                 </div>
             </div>
             <div class="form-group">
@@ -95,12 +95,12 @@
         </form>
     </div>
 </div>
-<script src="js/jquery.min.js?v=2.1.4"></script>
-<script src="js/bootstrap.min.js?v=3.3.6"></script>
-<script src="js/content.min.js?v=1.0.0"></script>
-<script src="js/plugins/validate/jquery.validate.min.js"></script>
-<script src="js/plugins/validate/messages_zh.min.js"></script>
-<script src="js/demo/form-validate-demo.min.js"></script>
+<script src="${ctximg}/static/secondclass/js/jquery.min.js"></script>
+<script src="${ctximg}/static/secondclass/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="${ctximg}/static/js/content.min.js?v=1.0.0"></script>
+<script src="${ctximg}/static/secondclass/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="${ctximg}/static/secondclass/js/plugins/validate/messages_zh.min.js"></script>
+<script src="${ctximg}/static/secondclass/js/demo/form-validate-demo.min.js"></script>
 <script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
 </body>
 </html>
