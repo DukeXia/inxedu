@@ -13,6 +13,7 @@ function isLogin(){
 	var user = getLoginUser();
 	if(user!=null && user.userId>0){
 		is=true;
+		alert(is);
 	}
 	return is;
 }
@@ -29,6 +30,7 @@ function getLoginUser(){
 		async:false,
 		dataType:'json',
 		success:function(result){
+            alert(result.entity);
 			user = result.entity;
 		}
 	});

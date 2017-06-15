@@ -33,7 +33,7 @@
     问卷标题<input type="text" name="surveyTitle" value="${surveyTitle}"/>
     发起问卷评价的学院 <input type="text" name="surveySchool" value="${surveySchool}"/>
     <input type="submit" value="搜索">
-     <a href="/admin/bookSurvey/toEdit/0/${bookSurveyTermId}">添加</a>
+     <a href="/admin/bookSurvey/toEdit/0">添加</a>
     <a href="/admin/excelSurvey/toBookSurveyImport/${bookSurveyTermId}">导入</a>
 </form>
 
@@ -75,7 +75,7 @@
 
             </td>
             <td align="center">
-                <a href="/admin/bookSurvey/toEdit/${bookSurvey.id}/${bookSurveyTermId}">编辑</a>
+                <a href="/admin/bookSurvey/toEdit/${bookSurvey.id}}">编辑</a>
                 <a href="/admin/bookSurvey/delete?id=${bookSurvey.id}">删除</a>
                 <a href="/admin/bookSurvey/voteInfo/${bookSurvey.id}/${bookSurvey.type}">评论详情</a>
             </td>

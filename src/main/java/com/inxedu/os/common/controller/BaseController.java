@@ -46,7 +46,7 @@ public class BaseController {
         HashMap json = new HashMap();
         json.put("success", Boolean.valueOf(success));
         json.put("message", message);
-        json.put("entity", entity);
+        json.put("Student", entity);
         return json;
     }
 
@@ -70,7 +70,7 @@ public class BaseController {
     public Map<String, Object> setAjaxException(Map<String, Object> map) {
         map.put("success", Boolean.valueOf(false));
         map.put("message", "系统繁忙，请稍后再操作！");
-        map.put("entity", (Object)null);
+        map.put("Student", (Object)null);
         return map;
     }
 

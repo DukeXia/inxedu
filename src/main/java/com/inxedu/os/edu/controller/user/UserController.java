@@ -486,6 +486,7 @@ public class UserController extends BaseController{
 			}else{
 				//缓存用户
 				EHCacheUtil.set(uuid, user,CacheConstans.USER_TIME_LONG);
+//				System.out.println(CacheConstans.USER_CURRENT_LOGINTIME);
 				//缓存用户的登录时间
 				EHCacheUtil.set(CacheConstans.USER_CURRENT_LOGINTIME+user.getUserId(), currentTimestamp.toString(), CacheConstans.USER_TIME_LONG);
 				WebUtils.setCookie(response, CacheConstans.WEB_USER_LOGIN_PREFIX, uuid, 1);
@@ -724,7 +725,7 @@ public class UserController extends BaseController{
 				return map;
 			}
 			Map<String, String> queryletter = msgReceiveService.queryUnReadMsgReceiveNumByCusId(Long.valueOf(SingletonLoginUtils.getLoginUserId(request)));// 查询该用户有多少未读消息
-			map.put("entity", queryletter);// 把值放入map中返回json
+			map.put("Student", queryletter);// 把值放入map中返回json
 		} catch (Exception e) {
 			logger.error("UserController.queryUnReadLetter()", e);
 			setExceptionRequest(request, e);

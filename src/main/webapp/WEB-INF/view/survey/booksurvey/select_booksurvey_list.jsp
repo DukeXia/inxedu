@@ -29,8 +29,8 @@
 <table border="1" width="1000" height="100%">
     <tr>
         <th>选择</th>
-        <td align="center">问卷标题</td>
-        <td align="center">发起问卷评价的学院</td>
+        <td align="center">评价标题</td>
+        <td align="center">发起教材评价的学院</td>
         <td align="center">学期</td>
         <td align="center">教材名称</td>
         <td align="center">教材主编</td>

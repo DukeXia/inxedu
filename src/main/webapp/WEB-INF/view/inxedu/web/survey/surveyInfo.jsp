@@ -48,7 +48,7 @@ margin: 0 auto;">
                         <div class='ui-controlgroup'>
                         <c:if test="${question.type==3}">
                                 <c:forEach items="${question.items}" var="iterm" >
-                                    <div class='ui-radio'><span class='jqradiowrapper'><input type='radio' value=''
+                                    <div class='ui-radio' style="overflow: hidden;"><span class='jqradiowrapper'><input type='radio' value=''
                                                                                               id='q1_${question.id}'
                                                                                               name="radio${question.id}_${iterm.id}"
                                                                                               style='display:none;'/><a
@@ -59,7 +59,7 @@ margin: 0 auto;">
                         </c:if>
                         <c:if test="${question.type==4}">
                             <c:forEach items="${question.items}" var="iterm" >
-                                <div class='ui-checkbox'><span class='jqcheckwrapper'><input type='checkbox' value=''
+                                <div class='ui-checkbox' style="overflow: hidden;><span class='jqcheckwrapper'><input type='checkbox' value=''
                                                                                              id='q1_${question.id}'
                                                                                              name='checkbox${question.id}_${iterm.id}'
                                                                                              style='display:none;'/><a
@@ -71,7 +71,7 @@ margin: 0 auto;">
                             </div>
                         <c:if test="${question.type==1}">
                             <c:forEach items="${question.items}" var="iterm" >
-                            <div class='ui-input-text' style='position:relative;'><input type='text'
+                            <div class='ui-input-text' style='position:relative;' style="overflow: hidden;><input type='text'
                                                                                          name='txt${question.id}_${iterm.id}'/>
                             </div>
                             </c:forEach>

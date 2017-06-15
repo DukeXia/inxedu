@@ -10,97 +10,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>regist</title>
-    <link href="/static/secondclass/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
-    <link href="/static/secondclass/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
-    <link href="/static/secondclass/css/animate.min.css" rel="stylesheet">
-    <link href="/static/secondclass/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <title>第二课堂</title>
+    <link rel="stylesheet" href="${ctximg}/static/secondclass/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="${ctximg}/static/secondclass/css/bootstrapValidator.min.css"/>
+
+    <script type="text/javascript" src="${ctx }/static/secondclass/js/jquery.min.js"></script>
+    <script type="text/javascript" src="${ctx }/static/secondclass/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="${ctx}/static/secondclass/js/bootstrapValidator.min.js"></script>
+    <script type="text/javascript" src="${ctx}/static/secondclass/js/language/zh_CN.js"></script>
+    <style>
+     span{
+         color: rgba(100,50,255,0.2);
+         text-shadow: 1px 2px #b0edff;
+     }
+      /*.btn-my{
+          color: rgba(203, 255, 35, 0.5);
+      }*/
+    </style>
 </head>
 <body>
-<div class="ibox float-e-margins">
-    <div class="ibox-title">
-        <h4>第二课堂成员注册</h4>
-        <div class="ibox-tools">
-            <a class="collapse-link">
-                <i class="fa fa-chevron-up"></i>
-            </a>
-            <a class="dropdown-toggle" data-toggle="dropdown" href="form_basic.html#">
-                <i class="fa fa-wrench"></i>
-            </a>
-            <ul class="dropdown-menu dropdown-user">
-                <li><a href="form_basic.html#">选项1</a>
-                </li>
-                <li><a href="form_basic.html#">选项2</a>
-                </li>
-            </ul>
-            <a class="close-link">
-                <i class="fa fa-times"></i>
-            </a>
-        </div>
-    </div>
-    <div class="ibox-content">
-        <form class="form-horizontal m-t" id="signupForm" novalidate="novalidate">
-            <div class="form-group">
-                <label class="col-sm-3 control-label">姓氏：</label>
-                <div class="col-sm-8">
-                    <input id="firstname" name="firstname" class="form-control" type="text">
-                    <%--<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 这里写点提示的内容</span>--%>
-                </div>
+<div class="container">
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2">
+            <div class="page-header">
+                <h2>第二课堂新生<span>注册</span></h2>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">名字：</label>
-                <div class="col-sm-8">
-                    <input id="lastname" name="lastname" class="form-control" type="text" aria-required="true" aria-invalid="false">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">用户名：</label>
-                <div class="col-sm-8">
-                    <input id="username" name="username" class="form-control" type="text" aria-required="true" aria-invalid="true">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">密码：</label>
-                <div class="col-sm-8">
-                    <input id="password" name="password" class="form-control" type="password">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">确认密码：</label>
-                <div class="col-sm-8">
-                    <input id="confirm_password" name="confirm_password" class="form-control" type="password">
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 请再次输入您的密码</span>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">E-mail：</label>
-                <div class="col-sm-8">
-                    <input id="email" name="email" class="form-control" type="email">
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-8 col-sm-offset-3">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" class="checkbox" id="agree" name="agree"> 我已经认真了解了第二课堂的基本信息
-                        </label>
+            <form id="defaultForm" method="post" class="form-horizontal" action="#">
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">学号</label>
+                    <div class="col-lg-5">
+                        <input type="text" class="form-control" placeholder="请输入学号" name="studentNo"/>
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-8 col-sm-offset-3">
-                    <button class="btn btn-primary" type="submit">提交</button>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">姓名</label>
+                    <div class="col-lg-5">
+                        <input type="text" class="form-control" placeholder="请输入姓名" name="name"/>
+                    </div>
                 </div>
-            </div>
-        </form>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">班级</label>
+                    <div class="col-lg-5">
+                        <input type="text" class="form-control" placeholder="请输入班级" name="classname"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">学院</label>
+                    <div class="col-lg-5">
+                        <input type="text" class="form-control" placeholder="请输入学院" name="college"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">指导老师</label>
+                    <div class="col-lg-5">
+                        <input type="text" class="form-control" placeholder="请输入指导老师" name="teacherName"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">兴趣方向</label>
+                    <div class="col-lg-5">
+                        <select name="avocation" class="form-control">
+                            <option value="">==请选择==</option>
+                            <option value="Java程序设计">Java程序设计</option>
+                            <option value="Android与IOS等手机研发">Android与微信等手机开发</option>
+                            <option value="服务器运维与网络安全">服务器运维与网络安全</option>
+                            <option value="微信公众号与小程序研发">微信公众号与小程序研发</option>
+                            <option value="页面设计">页面设计</option>
+                        </select>
+                        <%--<input type="text" class="form-control" name="avocation"/>--%>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">学习目标</label>
+                    <div class="col-lg-5">
+                        <input type="text" class="form-control" name="studyTarget"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">手机</label>
+                    <div class="col-lg-5">
+                        <input type="text" class="form-control" placeholder="请输入手机号" name="mobile"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">QQ</label>
+                    <div class="col-lg-5">
+                        <input type="text" class="form-control" placeholder="请输入qq号码" name="qq"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">微信</label>
+                    <div class="col-lg-5">
+                        <input type="text" class="form-control" placeholder="请输入微信号" name="weichat"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-lg-3 control-label">邮箱</label>
+                    <div class="col-lg-5">
+                        <input type="text" class="form-control" placeholder="请输入你的邮箱号码" name="email"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-9 col-lg-offset-3">
+                        <button type="button" onclick="regist()" class="btn btn-primary btn-my">注册</button>
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
     </div>
 </div>
-<script src="${ctximg}/static/secondclass/js/jquery.min.js"></script>
-<script src="${ctximg}/static/secondclass/js/bootstrap.min.js?v=3.3.6"></script>
-<script src="${ctximg}/static/js/content.min.js?v=1.0.0"></script>
-<script src="${ctximg}/static/secondclass/js/plugins/validate/jquery.validate.min.js"></script>
-<script src="${ctximg}/static/secondclass/js/plugins/validate/messages_zh.min.js"></script>
-<script src="${ctximg}/static/secondclass/js/demo/form-validate-demo.min.js"></script>
-<script type="text/javascript" src="http://tajs.qq.com/stats?sId=9051096" charset="UTF-8"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#defaultForm').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                studentNo: {
+                    message: '学号不是有效的',
+                    validators: {
+                        notEmpty: {
+                            message: '学号不能为空'
+                        },
+                        stringLength: {
+                            min: 10,
+                            max: 10,
+                            message: '学号为10位数字'
+                        },
+                        numeric: {
+                            message: '学号只能输入数字'
+                        }
+                    }
+                },
+                name: {
+                    validators: {
+                        notEmpty: {
+                            message: '姓名不能为空'
+                        },
+                        stringLength: {
+                            max: 15,
+                            message: '姓名不能超过15位'
+                        },
+                        regexp:{
+                            regexp: /^1[3|5|8]{1}[0-9]{9}$/,
+                            message: '姓名不能全是数字'
+                        }
+                    }
+                },
+                classname: {
+                    validators: {
+                        notEmpty: {
+                            message: '班级不能为空'
+                        },
+                        stringLength: {
+                            max: 15,
+                            message: '班级不能超过15位'
+                        }
+                    }
+                },
+                college: {
+                    validators: {
+                        notEmpty: {
+                            message: '学院不能为空'
+                        },
+                        stringLength: {
+                            max: 15,
+                            message: '学院不能超过15位'
+                        }
+                    }
+                },
+                teacherName: {
+                    validators: {
+                        notEmpty: {
+                            message: '指导老师不能为空'
+                        }
+                    }
+                },
+                studyTarget: {
+                    validators: {
+                        notEmpty: {
+                            message: '学习目标不能为空'
+                        }
+                    }
+                },
+                mobile: {
+                    validators: {
+                        notEmpty: {
+                            message: '手机号不能为空'
+                        },
+                        stringLength: {
+                            min:11,
+                            max: 11,
+                            message: '请输入11位的手机号'
+                       },
+                         regexp:{
+                              regexp: /^1[3|5|8]{1}[0-9]{9}$/,
+                              message: '请输入正确的手机号'
+                         }
+                    }
+                },
+                qq: {
+                    validators: {
+                        notEmpty: {
+                            message: 'qq不能为空'
+                        },
+                        regexp: {
+                            regexp: /^[1-9][0-9]{4,9}$/,
+                            message: '请输入正确的QQ号'
+                        }
+                    }
+                },
+                avocation: {
+                    validators: {
+                        notEmpty: {
+                            message: '兴趣方向不能为空'
+                        }
+                    }
+                },
+                weichat: {
+                    validators: {
+                        notEmpty: {
+                            message: '微信不能为空'
+                        }
+                    }
+                },
+                email: {
+                    validators: {
+                        notEmpty: {
+                            message: '邮箱不能为空'
+                        },
+                        emailAddress: {
+                            message: '邮箱格式不正确'
+                        }
+                    }
+                }
+            }
+        });
+    });
+
+    function regist() {
+        var bootstrapValidator = $("#defaultForm").data('bootstrapValidator');
+        bootstrapValidator.validate();
+        if (bootstrapValidator.isValid()) {
+            $.ajax({
+                url: "/secondclass/user/regist",
+                type: "POST",
+                dataType: "json",
+                data: $("#defaultForm").serialize(),
+                success: function (data) {
+                    if (data.success) {
+                        alert(data.message);
+                        location.href = "/";
+                    }else {
+                        alert(data.message);
+                    }
+                },
+                error: function (error) {
+
+                }
+
+            });
+        }
+    }
+</script>
 </body>
 </html>

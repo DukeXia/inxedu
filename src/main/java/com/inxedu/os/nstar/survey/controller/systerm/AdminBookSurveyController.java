@@ -25,7 +25,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/admin/bookSurvey")
-public class AdminBookSurveyController extends BaseController{
+public class   AdminBookSurveyController extends BaseController{
     private  static final Logger log= LoggerFactory.getLogger(AdminBookSurveyController.class);
     @Autowired
     private BookSurveyService bookSurveyService;
@@ -61,12 +61,12 @@ public class AdminBookSurveyController extends BaseController{
         }else if("true".equals(type)){
                 bookSurveyService.updateByPrimaryKeySelective(bookSurvey);
         }
-        return "redirect:/admin/bookSurveyTerm/bookSurveyList?id="+bookSurvey.getBookSurveyTermId();
+        return "redirect:/admin/bookSurvey/list";
     }
-    @RequestMapping("/toEdit/{id}/{bookSurveyTermId}")
-    public String toEdit(HttpServletRequest request,@PathVariable("id") long id,@PathVariable("bookSurveyTermId") long bookSurveyTermId) {
+    @RequestMapping("/toEdit/{id}")
+    public String toEdit(HttpServletRequest request,@PathVariable("id") long id) {
         request.setAttribute("id",id);
-        request.setAttribute("bookSurveyTermId",bookSurveyTermId);
+//        request.setAttribute("bookSurveyTermId",bookSurveyTermId);
         if (id>0l){
             BookSurvey bookSurvey = bookSurveyService.selectByPrimaryKey(id);
             request.setAttribute("bookSurvey",bookSurvey);

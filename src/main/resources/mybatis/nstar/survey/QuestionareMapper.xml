@@ -23,22 +23,7 @@
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="update_man" property="updateMan" jdbcType="VARCHAR" />
     <collection property="questions" ofType="com.inxedu.os.nstar.survey.entity.Question" select="selectQues" column="id">
-      <!--resultMap="SurveyQuestionMapper.BaseResultMap"-->
-      <!--ofType="com.inxedu.os.nstar.survey.entity.Question" select="selectQues" column="id"-->
-     <!--<id column="id" property="id" jdbcType="BIGINT"/>
-      <result column="sort_num" property="sortNum" jdbcType="INTEGER" />
-      <result column="topic" property="topic" jdbcType="VARCHAR" />
-      <result column="type" property="type" jdbcType="INTEGER" />
-      <result column="state" property="state" jdbcType="BIT" />
-      <result column="questionare_id" property="questionareId" jdbcType="BIGINT" />-->
-     <!-- <collection property="items" ofType="com.inxedu.os.nstar.survey.entity.Items" select="selectIterms" column="id">
-        <id column="id" property="id" jdbcType="BIGINT" />
-        <result column="sort_num" property="sortNum" jdbcType="INTEGER" />
-        <result column="item" property="item" jdbcType="VARCHAR" />
-        <result column="statistics" property="statistics" jdbcType="INTEGER" />
-        <result column="state" property="state" jdbcType="BIT" />
-        <result column="question_id" property="questionId" jdbcType="BIGINT" />
-      </collection>-->
+
     </collection>
   </resultMap>
   <sql id="Base_Column_List" >
